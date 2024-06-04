@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Calculadora de cuadrado</title>
+</head>
+<body>
+    <h1>Calculadora de cuadrado</h1>
+    <label for="numero">Ingresa un número:</label>
+    <input type="number" id="numero" required>
+    <button onclick="calcularCuadrado()">Calcular cuadrado</button>
+    <div id="resultado"></div>
+
+    <script>
+        function calcularCuadrado() {
+            var numero = document.getElementById('numero').value;
+            var resultado = numero * numero;
+            document.getElementById('resultado').innerText = 'El cuadrado de ' + numero + ' es: ' + resultado;
+        }
+    </script>
+</body>
+</html>
