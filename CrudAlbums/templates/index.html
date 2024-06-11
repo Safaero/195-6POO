@@ -6,6 +6,15 @@
     <title>Formulario Albums</title>
 </head>
 <body>
+
+    {% with msj = get_flashed_messages()%}
+    {% if msj%}
+    {%for mensaje in msj%}
+        <h1> {{mensaje}} </h1>
+    {%endfor%}
+    {%endif%}
+    {%endwith%}
+
     <form action="/guardarAlbum" method="post">
         <label for="titulo">Título:</label>
         <input type="text"  name="txtTitulo"><br><br>
