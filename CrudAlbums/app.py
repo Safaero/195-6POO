@@ -12,8 +12,15 @@ mysql=MySQL(app)
 
 @app.route('/')
 def index():
-    return render_template ('index.html')	
-
+    try:
+        cursor= mysql.connection.cursor();
+        cursor.execute('select * from albums')
+        consultaA= cursor.fetchall()
+        #print(consultaA)
+        return render_template ('index.html',albums=consultaA)	
+    except Exception as e:
+        print (e)
+    
 @app.route('/guardarAlbum',methods=['POST'])
 def guardarAlbum():
     if request.method == 'POST':
