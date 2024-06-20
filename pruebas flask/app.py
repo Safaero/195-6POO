@@ -18,6 +18,15 @@ def index():
 def registros():
     return render_template('registros.html')
 
+@app.route('/consulta')
+def consulta():
+        cursor= mysql.connection.cursor();
+        cursor.execute('select * from tb_medicos')
+        medicos= cursor.fetchall()
+
+        return render_template ('consulta.html',medicos=medicos)	
+
+
 @app.route('/guardarMedico',methods=['POST'])
 def guardarMedico():
     if request.method == 'POST':
@@ -32,7 +41,7 @@ def guardarMedico():
         cursor.execute('INSERT INTO tb_medicos (nombre,correo,id_roles,cedula,rfc,contraseña) VALUES (%s,%s,%s,%s,%s,%s)',(fnombre,fcorreo,frol,fcedula,frfc,fcontraseña))
         mysql.connection.commit()
         flash ('medico integrado correctamente')
-        return redirect(url_for('registros'))
+        return redirect(url_for('consulta'))
      
 @app.errorhandler(404)     
 def paginando(e):
