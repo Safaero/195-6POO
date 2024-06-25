@@ -20,6 +20,26 @@ def index():
         return render_template ('index.html',albums=consultaA)	
     except Exception as e:
         print (e)
+        
+@app.route('/editar/<id>')
+def editar(id):
+    cur= mysql.connection.cursor()
+    cur.execute('select * from albums where idAlbum=%s',[id])
+    albumE= cur.fetchone()
+    return render_template('editar.html',album= albumE)
+
+@app.route('/guardarCambios/<id>',methods=['POST'])
+def guardarCambios(id):
+    if request.method == 'POST':
+        ftitulo= request.form ['txtTitulo']
+        fartista= request.form ['txtArtista']
+        fanio= request.form ['txtAnio']
+        #print(titulo,artista,anio)
+        cursor = mysql.connection.cursor()
+        cursor.execute('update albums set titulo=%s, artista=%s, anio=%s where idAlbum=%s', (ftitulo,fartista,fanio,id))
+        mysql.connection.commit()
+        flash ('cambios guardados correctamente')
+        return redirect(url_for('index'))
     
 @app.route('/guardarAlbum',methods=['POST'])
 def guardarAlbum():
