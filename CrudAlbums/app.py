@@ -21,6 +21,14 @@ def index():
     except Exception as e:
         print (e)
         
+@app.route('/eliminar/<id>')
+def eliminar(id):
+    cur = mysql.connection.cursor()
+    cur.execute('DELETE FROM albums WHERE idAlbum = {0}'.format(id))
+    mysql.connection.commit()
+    flash('Album eliminado correctamente')
+    return redirect(url_for('index'))        
+        
 @app.route('/editar/<id>')
 def editar(id):
     cur= mysql.connection.cursor()

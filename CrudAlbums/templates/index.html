@@ -17,7 +17,7 @@
 
     <form action="/guardarAlbum" method="post">
         <label for="titulo">Título:</label>
-        <input type="text"  name="txtTitulo"><br><br>
+        <input type="text" name="txtTitulo"><br><br>
 
         <label for="artista">Artista:</label>
         <input type="text" name="txtArtista"><br><br>
@@ -40,23 +40,31 @@
         <td>Album:</td>
         <td>Artista:</td>
         <td>Año:</td>
-        <td>operaciones:</td>
+        <td>Operaciones:</td>
 
     </tr>
 </thead>
 <tbody>
     {%for album in albums%}
     <tr>
-    <td>{{album.0}}</td>
-    <td>{{album.1}}</td>
-    <td>{{album.2}}</td>
-    <td>{{album.3}}</td>
-    <td><a href="/editar/{{album.0}}"> editar</a></td>
-    <td><a href="#"> borrar</a></td>
+        <td>{{album.0}}</td>
+        <td>{{album.1}}</td>
+        <td>{{album.2}}</td>
+        <td>{{album.3}}</td>
+        <td><a href="/editar/{{album.0}}">Editar</a></td>
+        <td><a href="#" onclick="confirmarEliminacion({{album.0}})">Eliminar</a></td>
     </tr>
     {%endfor%}
 </tbody>
 </table>
+
+<script type="text/javascript">
+    function confirmarEliminacion(id) {
+        if (confirm("¿Estás seguro de que deseas eliminar este álbum?")) {
+            window.location.href = "/eliminar/" + id;
+        }
+    }
+</script>
 
 </body>
 </html>
