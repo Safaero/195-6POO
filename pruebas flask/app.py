@@ -25,7 +25,23 @@ def consulta():
         medicos= cursor.fetchall()
 
         return render_template ('consulta.html',medicos=medicos)	
+    
+@app.route('/expedientes')
+def expedientes():
+    return render_template('expedientes.html')
 
+@app.route('/guardarPaciente',methods=['POST'])
+def guardarPaciente():
+    if request.method == 'POST':
+        fnombre= request.form ['txtnombre']
+        fpaciente= request.form ['txtpaciente']
+        ffecha= request.form ['txtfecha']
+        #print(titulo,artista,anio)
+        cursor = mysql.connection.cursor()
+        cursor.execute('INSERT INTO tb_pacientes (nombre,paciente,fecha) VALUES (%s,%s,%s)',(fnombre,fpaciente,ffecha))
+        mysql.connection.commit()
+        flash ('Expediente generado correctamente')
+        return redirect(url_for('expedientes'))
 
 @app.route('/guardarMedico',methods=['POST'])
 def guardarMedico():
