@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario Albums</title>
-</head>
-<body>
+    {%extends "plantilla.html"%}
+
+    {%block body%}
+    <h1>Editar album</h1>
 
     <form action="/guardarCambios/{{album.0}}" method="post">
 
@@ -22,5 +18,4 @@
 
     </form>
 
-</body>
-</html>
+    {%endblock%}

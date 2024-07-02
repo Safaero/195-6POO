@@ -59,7 +59,7 @@ def guardarAlbum():
         cursor = mysql.connection.cursor()
         cursor.execute('INSERT INTO albums (titulo,artista,anio) VALUES (%s,%s,%s)',(ftitulo,fartista,fanio))
         mysql.connection.commit()
-        flash ('album guardado correctamente')
+        flash ('¡¡Album guardado correctamente!!')
         return redirect(url_for('index'))
      
 @app.errorhandler(404)     

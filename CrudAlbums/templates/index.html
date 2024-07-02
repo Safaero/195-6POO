@@ -1,70 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario Albums</title>
-</head>
-<body>
+{% extends "plantilla.html" %}
 
-    {% with msj = get_flashed_messages()%}
-    {% if msj%}
-    {%for mensaje in msj%}
-        <h1> {{mensaje}} </h1>
-    {%endfor%}
-    {%endif%}
-    {%endwith%}
+{% block body %}
 
-    <form action="/guardarAlbum" method="post">
-        <label for="titulo">Título:</label>
-        <input type="text" name="txtTitulo"><br><br>
+{% with msj = get_flashed_messages() %}
+{% if msj %}
+{% for mensaje in msj %}
 
-        <label for="artista">Artista:</label>
-        <input type="text" name="txtArtista"><br><br>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>{{ mensaje }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 
-        <label for="año">Año:</label>
-        <input type="number" name="txtAnio"><br><br>
+{% endfor %}
+{% endif %}
+{% endwith %}
 
-        <button type="submit">Guardar Album</button>
-    </form>
+<h1 class="text-center mt-5 mb-5 display-3 text-alert">Gestion albums</h1>
+<div class="row">
+    <div class="col-md-5">
+        <form action="/guardarAlbum" method="post">
+            <label for="titulo">Título:</label>
+            <input type="text" name="txtTitulo"><br><br>
+    
+            <label for="artista">Artista:</label>
+            <input type="text" name="txtArtista"><br><br>
+    
+            <label for="año">Año:</label>
+            <input type="number" name="txtAnio"><br><br>
+    
+            <button type="submit">Guardar Album</button>
+        </form>
+    
+    </div>
+    <div class="col-md-7">
+        <table>
+            <thead>
+                <tr>
+                    <td>ID:</td>
+                    <td>Album:</td>
+                    <td>Artista:</td>
+                    <td>Año:</td>
+                    <td>Operaciones:</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for album in albums %}
+                <tr>
+                    <td>{{ album.0 }}</td>
+                    <td>{{ album.1 }}</td>
+                    <td>{{ album.2 }}</td>
+                    <td>{{ album.3 }}</td>
+                    <td><a href="/editar/{{ album.0 }}">Editar</a></td>
+                    <td><a href="#" onclick="confirmarEliminacion('{{ album.0 }}')">Eliminar</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<br>
-<br>
-<br>
-
-<table>
-<thead>
-    <tr>
-
-        <td>ID:</td>
-        <td>Album:</td>
-        <td>Artista:</td>
-        <td>Año:</td>
-        <td>Operaciones:</td>
-
-    </tr>
-</thead>
-<tbody>
-    {%for album in albums%}
-    <tr>
-        <td>{{album.0}}</td>
-        <td>{{album.1}}</td>
-        <td>{{album.2}}</td>
-        <td>{{album.3}}</td>
-        <td><a href="/editar/{{album.0}}">Editar</a></td>
-        <td><a href="#" onclick="confirmarEliminacion({{album.0}})">Eliminar</a></td>
-    </tr>
-    {%endfor%}
-</tbody>
-</table>
-
-<script type="text/javascript">
-    function confirmarEliminacion(id) {
-        if (confirm("¿Estás seguro de que deseas eliminar este álbum?")) {
-            window.location.href = "/eliminar/" + id;
-        }
-    }
-</script>
-
-</body>
-</html>
+{% endblock %}
