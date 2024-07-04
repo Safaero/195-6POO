@@ -10,7 +10,13 @@
         <strong>{{ mensaje }}</strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-
+    <script>
+    Swal.fire({
+        title: "Correcto",
+        text: "Album Guardado con Exito!!",
+        icon: "success"
+      });
+    </script>
 {% endfor %}
 {% endif %}
 {% endwith %}
@@ -18,44 +24,55 @@
 <h1 class="text-center mt-5 mb-5 display-3 text-alert">Gestion albums</h1>
 <div class="row">
     <div class="col-md-5">
+        <div class="container">
         <form action="/guardarAlbum" method="post">
+
+            <div class="mb-3">
+
             <label for="titulo">Título:</label>
-            <input type="text" name="txtTitulo"><br><br>
-    
+            <input type="text" name="txtTitulo" class="form-control"><br><br>
+        </div>
+            <div class="mb-3">
+
             <label for="artista">Artista:</label>
-            <input type="text" name="txtArtista"><br><br>
-    
+            <input type="text" name="txtArtista" class="form-control"><br><br>
+        </div>
+            <div class="mb-3">
+
             <label for="año">Año:</label>
-            <input type="number" name="txtAnio"><br><br>
+            <input type="number" name="txtAnio" class="form-control"><br><br>
+        </div>
     
-            <button type="submit">Guardar Album</button>
+            <button type="submit" class="btn btn-outline-success mt-2 mb-5">Guardar Album</button>
         </form>
-    
+    </div>
     </div>
     <div class="col-md-7">
-        <table>
-            <thead>
+        <div class="container">
+        <table class="table">
+            <thead class="thead-dark">
                 <tr>
-                    <td>ID:</td>
-                    <td>Album:</td>
-                    <td>Artista:</td>
-                    <td>Año:</td>
-                    <td>Operaciones:</td>
+                    <th scope="col">ID:</th>
+                    <th scope="col">Album:</th>
+                    <th scope="col">Artista:</th>
+                    <th scope="col">Año:</th>
+                    <th scope="col">Operaciones:</th>
                 </tr>
             </thead>
             <tbody>
                 {% for album in albums %}
                 <tr>
-                    <td>{{ album.0 }}</td>
+                    <th scope="row">{{ album.0 }}</th>
                     <td>{{ album.1 }}</td>
                     <td>{{ album.2 }}</td>
                     <td>{{ album.3 }}</td>
-                    <td><a href="/editar/{{ album.0 }}">Editar</a></td>
-                    <td><a href="#" onclick="confirmarEliminacion('{{ album.0 }}')">Eliminar</a></td>
+                    <td><a href="/editar/{{ album.0 }}" class="btn btn-secondary">Editar</a></td>
+                    <td><a href="#" onclick="confirmarEliminacion('{{ album.0 }}')" class="btn btn-warning">Eliminar</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        </div>
     </div>
 </div>
 

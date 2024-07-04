@@ -1,21 +1,28 @@
-    {%extends "plantilla.html"%}
+{% extends "plantilla.html" %}
 
-    {%block body%}
-    <h1>Editar album</h1>
+{% block body %}
+<h1>Editar álbum</h1>
 
-    <form action="/guardarCambios/{{album.0}}" method="post">
+<form action="/guardarCambios/{{album.0}}" method="post" class="container mt-4">
 
-        <label for="titulo">Título:</label>
-        <input type="text"  name="txtTitulo" value="{{album.1}}"><br><br>
+    <div class="mb-3">
+        <label for="titulo" class="form-label">Título:</label>
+        <input type="text" id="titulo" name="txtTitulo" class="form-control" value="{{album.1}}">
+    </div>
 
-        <label for="artista">Artista:</label>
-        <input type="text" name="txtArtista" value="{{album.2}}"><br><br>
+    <div class="mb-3">
+        <label for="artista" class="form-label">Artista:</label>
+        <input type="text" id="artista" name="txtArtista" class="form-control" value="{{album.2}}">
+    </div>
 
-        <label for="año">Año:</label>
-        <input type="number" name="txtAnio" value="{{album.3}}"><br><br>
+    <div class="mb-3">
+        <label for="año" class="form-label">Año:</label>
+        <input type="number" id="año" name="txtAnio" class="form-control" value="{{album.3}}">
+    </div>
 
-        <button type="submit">editar Album</button>
+    <button type="submit" class="btn btn-primary">Editar álbum</button>
 
-    </form>
+</form>
 
-    {%endblock%}
+{% endblock %}
+
