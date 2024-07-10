@@ -42,7 +42,7 @@
     </style>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="">Inicio</a>
+        <a class="navbar-brand" href="home">Inicio</a>
         <a class="navbar-brand" href="registros">Registro</a>
         <a class="navbar-brand" href="consulta">medicos</a>
         <a class="navbar-brand" href="expedientes">Pacientes</a>
@@ -77,9 +77,35 @@
                 <input type="date" class="form-control" id="fecha" name="txtfecha" required>
             </div>
 
-
-            <button type="submit" class="btn btn-primary">Guardar Paciente <button>
+            <button type="submit" class="btn btn-primary">Guardar Paciente</button>
         </form>
+    </div>
+
+    <div class="container mt-5">
+        <h2>Pacientes Registrados</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Medico</th>
+                    <th>Nombre</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for paciente in pacientes %}
+                <tr>
+                    <td>{{ paciente[0] }}</td>
+                    <td>{{ paciente[1] }}</td>
+                    <td>{{ paciente[2] }}</td>
+                    <td>
+                        <a href="#" class="btn btn-warning">Editar</a>
+                        <a href="#" class="btn btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
     <!-- Bootstrap JS and dependencies -->

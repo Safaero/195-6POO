@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Paciente</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2 class="welcome-message">Editar expediente</h2>
+
+        <form action="/editarPaciente/{{ paciente[0] }}" method="post" class="mt-4">
+            <div class="form-group">
+                <label for="nombre">Nombre medico que atiende</label>
+                <input type="text" class="form-control" id="nombre" name="txtnombre" value="{{ paciente[1] }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="paciente">Nombre Paciente</label>
+                <input type="text" class="form-control" id="paciente" name="txtpaciente" value="{{ paciente[2] }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha">Fecha</label>
+                <input type="date" class="form-control" id="fecha" name="txtfecha" value="{{ paciente[3] }}" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Actualizar Paciente</button>
+        </form>
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

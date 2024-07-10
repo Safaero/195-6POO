@@ -11,8 +11,22 @@ app.secret_key ='mysecretkey'
 mysql=MySQL(app)
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        return redirect(url_for('home'))
+    return render_template('login.html')
+
+@app.route('/home')
+def home():
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT * FROM tbmedicos')
+        consultaA = cursor.fetchall()
+        return render_template('index.html', albums=consultaA)
+    except Exception as e:
+        print(f"Error al realizar la consulta en la tabla tbmedicos: {e}")
+        return render_template('index.html', albums=[])
 
 @app.route('/registros')
 def registros():
@@ -28,7 +42,15 @@ def consulta():
     
 @app.route('/expedientes')
 def expedientes():
-    return render_template('expedientes.html')
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT * FROM tb_pacientes')
+        pacientes = cursor.fetchall()
+        return render_template('expedientes.html', pacientes=pacientes)
+    except Exception as e:
+        print(f"Error al realizar la consulta en la tabla tb_pacientes: {e}")
+        return render_template('expedientes.html', pacientes=[])
+
 
 @app.route('/guardarPaciente',methods=['POST'])
 def guardarPaciente():
@@ -58,6 +80,34 @@ def guardarMedico():
         mysql.connection.commit()
         flash ('medico integrado correctamente')
         return redirect(url_for('consulta'))
+    
+    
+    @app.route('/editarPaciente/<int:id>', methods=['GET', 'POST'])
+    def editarPaciente(id):
+        if request.method == 'POST':
+            fnombre = request.form['txtnombre']
+            fpaciente = request.form['txtpaciente']
+            ffecha = request.form['txtfecha']
+            cursor = mysql.connection.cursor()
+            cursor.execute('UPDATE tb_pacientes SET nombre=%s, paciente=%s, fecha=%s WHERE id=%s', (fnombre, fpaciente, ffecha, id))
+            mysql.connection.commit()
+            flash('Paciente actualizado correctamente')
+            return redirect(url_for('expedientes'))
+        else:
+            cursor = mysql.connection.cursor()
+            cursor.execute('SELECT * FROM tb_pacientes WHERE id=%s', (id,))
+            paciente = cursor.fetchone()
+        return render_template('editar_paciente.html', paciente=paciente)
+    
+
+@app.route('/eliminarPaciente/<int:id>', methods=['GET', 'POST'])
+def eliminarPaciente(id):
+    cursor = mysql.connection.cursor()
+    cursor.execute('DELETE FROM tb_pacientes WHERE id=%s', (id,))
+    mysql.connection.commit()
+    flash('Paciente eliminado correctamente')
+    return redirect(url_for('expedientes'))
+
      
 @app.errorhandler(404)     
 def paginando(e):
