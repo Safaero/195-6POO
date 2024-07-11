@@ -52,18 +52,29 @@ def expedientes():
         return render_template('expedientes.html', pacientes=[])
 
 
-@app.route('/guardarPaciente',methods=['POST'])
+@app.route('/guardarPaciente', methods=['POST'])
 def guardarPaciente():
     if request.method == 'POST':
-        fnombre= request.form ['txtnombre']
-        fpaciente= request.form ['txtpaciente']
-        ffecha= request.form ['txtfecha']
-        #print(titulo,artista,anio)
+        fnombre = request.form['txtnombre']
+        fpaciente = request.form['txtpaciente']
+        ffecha = request.form['txtfecha']
+        
         cursor = mysql.connection.cursor()
-        cursor.execute('INSERT INTO tb_pacientes (nombre,paciente,fecha) VALUES (%s,%s,%s)',(fnombre,fpaciente,ffecha))
+
+        # Verificar si el médico existe en la tabla tb_medicos
+        cursor.execute('SELECT * FROM tb_medicos WHERE nombre = %s', (fnombre,))
+        medico = cursor.fetchone()
+
+        if medico is None:
+            flash('El nombre del médico no existe en la tabla de médicos.')
+            return redirect(url_for('expedientes'))
+
+        # Insertar el nuevo paciente
+        cursor.execute('INSERT INTO tb_pacientes (nombre, paciente, fecha) VALUES (%s, %s, %s)', (fnombre, fpaciente, ffecha))
         mysql.connection.commit()
-        flash ('Expediente generado correctamente')
+        flash('Expediente generado correctamente')
         return redirect(url_for('expedientes'))
+
 
 @app.route('/guardarMedico',methods=['POST'])
 def guardarMedico():
@@ -82,21 +93,21 @@ def guardarMedico():
         return redirect(url_for('consulta'))
     
     
-    @app.route('/editarPaciente/<int:id>', methods=['GET', 'POST'])
-    def editarPaciente(id):
-        if request.method == 'POST':
-            fnombre = request.form['txtnombre']
-            fpaciente = request.form['txtpaciente']
-            ffecha = request.form['txtfecha']
-            cursor = mysql.connection.cursor()
-            cursor.execute('UPDATE tb_pacientes SET nombre=%s, paciente=%s, fecha=%s WHERE id=%s', (fnombre, fpaciente, ffecha, id))
-            mysql.connection.commit()
-            flash('Paciente actualizado correctamente')
-            return redirect(url_for('expedientes'))
-        else:
-            cursor = mysql.connection.cursor()
-            cursor.execute('SELECT * FROM tb_pacientes WHERE id=%s', (id,))
-            paciente = cursor.fetchone()
+@app.route('/editarPaciente/<int:id>', methods=['GET', 'POST'])
+def editarPaciente(id):
+    if request.method == 'POST':
+        fnombre = request.form['txtnombre']
+        fpaciente = request.form['txtpaciente']
+        ffecha = request.form['txtfecha']
+        cursor = mysql.connection.cursor()
+        cursor.execute('UPDATE tb_pacientes SET nombre=%s, paciente=%s, fecha=%s WHERE id=%s', (fnombre, fpaciente, ffecha, id))
+        mysql.connection.commit()
+        flash('Paciente actualizado correctamente')
+        return redirect(url_for('expedientes'))
+    else:
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT * FROM tb_pacientes WHERE id=%s', (id,))
+        paciente = cursor.fetchone()
         return render_template('editar_paciente.html', paciente=paciente)
     
 
