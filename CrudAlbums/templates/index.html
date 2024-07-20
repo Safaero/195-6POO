@@ -44,7 +44,7 @@
                 </div>
                 <button type="submit" class="btn btn-outline-success mt-2 mb-5">Guardar Album</button>
             </form>
-    </div>
+        </div>
     </div>
     <div class="col-md-7">
         <div class="container">
@@ -52,34 +52,26 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">ID:</th>
+                    <th scope="col">Portada:</th>
                     <th scope="col">Album:</th>
                     <th scope="col">Artista:</th>
                     <th scope="col">Año:</th>
                     <th scope="col">Operaciones:</th>
                 </tr>
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">ID:</th>
-                        <th scope="col">Portada:</th>
-                        <th scope="col">Album:</th>
-                        <th scope="col">Artista:</th>
-                        <th scope="col">Año:</th>
-                        <th scope="col">Operaciones:</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for album in albums %}
-                    <tr>
-                        <th scope="row">{{ album.0 }}</th>
-                        <td><img src="{{ url_for('static', filename=album.4) }}" alt="Portada" width="50"></td>
-                        <td>{{ album.1 }}</td>
-                        <td>{{ album.2 }}</td>
-                        <td>{{ album.3 }}</td>
-                        <td><a href="/editar/{{ album.0 }}" class="btn btn-secondary">Editar</a></td>
-                        <td><a href="#" onclick="confirmarEliminacion('{{ album.0 }}')" class="btn btn-warning">Eliminar</a></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+            </thead>
+            <tbody>
+                {% for album in albums %}
+                <tr>
+                    <th scope="row">{{ album.0 }}</th>
+                    <td><img src="{{ url_for('static', filename='uploads/' ~ album.4) }}" alt="Portada" width="50"></td>
+                    <td>{{ album.1 }}</td>
+                    <td>{{ album.2 }}</td>
+                    <td>{{ album.3 }}</td>
+                    <td><a href="/editar/{{ album.0 }}" class="btn btn-secondary">Editar</a></td>
+                    <td><a href="#" onclick="confirmarEliminacion('{{ album.0 }}')" class="btn btn-warning">Eliminar</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
         </div>
     </div>
