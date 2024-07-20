@@ -10,13 +10,17 @@ app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'bdflask'
 app.secret_key = 'mysecretkey'
 
-app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads')
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg'}
 
 mysql = MySQL(app)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+def create_upload_folder():
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
 
 @app.route('/')
 def index():
@@ -110,4 +114,5 @@ def paginando(e):
     return 'revisa tu sintaxis: no encontrado naada'
 
 if __name__ == '__main__':
+    create_upload_folder()
     app.run(debug=True, port=3000)
