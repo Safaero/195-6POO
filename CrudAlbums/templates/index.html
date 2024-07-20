@@ -25,26 +25,25 @@
 <div class="row">
     <div class="col-md-5">
         <div class="container">
-        <form action="/guardarAlbum" method="post">
-
-            <div class="mb-3">
-
-            <label for="titulo">Título:</label>
-            <input type="text" name="txtTitulo" class="form-control"><br><br>
-        </div>
-            <div class="mb-3">
-
-            <label for="artista">Artista:</label>
-            <input type="text" name="txtArtista" class="form-control"><br><br>
-        </div>
-            <div class="mb-3">
-
-            <label for="año">Año:</label>
-            <input type="number" name="txtAnio" class="form-control"><br><br>
-        </div>
-    
-            <button type="submit" class="btn btn-outline-success mt-2 mb-5">Guardar Album</button>
-        </form>
+            <form action="/guardarAlbum" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="titulo">Título:</label>
+                    <input type="text" name="txtTitulo" class="form-control"><br><br>
+                </div>
+                <div class="mb-3">
+                    <label for="artista">Artista:</label>
+                    <input type="text" name="txtArtista" class="form-control"><br><br>
+                </div>
+                <div class="mb-3">
+                    <label for="año">Año:</label>
+                    <input type="number" name="txtAnio" class="form-control"><br><br>
+                </div>
+                <div class="mb-3">
+                    <label for="portada">Portada:</label>
+                    <input type="file" name="portada" accept=".jpg, .png" class="form-control"><br><br>
+                </div>
+                <button type="submit" class="btn btn-outline-success mt-2 mb-5">Guardar Album</button>
+            </form>
     </div>
     </div>
     <div class="col-md-7">
@@ -58,19 +57,29 @@
                     <th scope="col">Año:</th>
                     <th scope="col">Operaciones:</th>
                 </tr>
-            </thead>
-            <tbody>
-                {% for album in albums %}
-                <tr>
-                    <th scope="row">{{ album.0 }}</th>
-                    <td>{{ album.1 }}</td>
-                    <td>{{ album.2 }}</td>
-                    <td>{{ album.3 }}</td>
-                    <td><a href="/editar/{{ album.0 }}" class="btn btn-secondary">Editar</a></td>
-                    <td><a href="#" onclick="confirmarEliminacion('{{ album.0 }}')" class="btn btn-warning">Eliminar</a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">ID:</th>
+                        <th scope="col">Portada:</th>
+                        <th scope="col">Album:</th>
+                        <th scope="col">Artista:</th>
+                        <th scope="col">Año:</th>
+                        <th scope="col">Operaciones:</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for album in albums %}
+                    <tr>
+                        <th scope="row">{{ album.0 }}</th>
+                        <td><img src="{{ url_for('static', filename=album.4) }}" alt="Portada" width="50"></td>
+                        <td>{{ album.1 }}</td>
+                        <td>{{ album.2 }}</td>
+                        <td>{{ album.3 }}</td>
+                        <td><a href="/editar/{{ album.0 }}" class="btn btn-secondary">Editar</a></td>
+                        <td><a href="#" onclick="confirmarEliminacion('{{ album.0 }}')" class="btn btn-warning">Eliminar</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
         </table>
         </div>
     </div>
