@@ -1,32 +1,38 @@
-from flask import Flask, request, render_template, url_for, redirect, flash
+from flask import Flask, request, render_template, url_for, redirect, flash, session
 from flask_mysqldb import MySQL
+
 app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'bdflask'
+app.secret_key = 'mysecretkey'
 
-app.secret_key ='mysecretkey'
+mysql = MySQL(app)
 
-mysql=MySQL(app)
 
-@app.route('/')
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        return redirect(url_for('home'))
+        rfc = request.form['rfc']
+        contraseña = request.form['contraseña']
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT nombre FROM tb_medicos WHERE rfc = %s AND contraseña = %s', (rfc, contraseña))
+        medico = cursor.fetchone()
+        
+        if medico:
+            session['nombre_medico'] = medico[0]  # Almacenar el nombre del médico en la sesión
+            return redirect(url_for('home'))
+        else:
+            flash('Credenciales incorrectas. Inténtalo de nuevo.')
+            return redirect(url_for('login'))
     return render_template('login.html')
+
 
 @app.route('/home')
 def home():
-    try:
-        cursor = mysql.connection.cursor()
-        cursor.execute('SELECT * FROM tbmedicos')
-        consultaA = cursor.fetchall()
-        return render_template('index.html', albums=consultaA)
-    except Exception as e:
-        print(f"Error al realizar la consulta en la tabla tbmedicos: {e}")
-        return render_template('index.html', albums=[])
+    nombre_medico = session.get('nombre_medico', 'Doctor')
+    return render_template('index.html', nombre_medico=nombre_medico)
 
 @app.route('/registros')
 def registros():
