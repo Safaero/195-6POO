@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="btn btn-dark" href="{{ url_for('home') }}">Inicio</a>
+                    <a class="btn btn-dark" href="{{ url_for('expediente') }}">Opciones de pacientes</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="mt-5">Diagnóstico</h1>
+        <form>
+            <div class="form-group">
+                <label for="sintomas">Síntomas</label>
+                <textarea class="form-control" id="sintomas" name="sintomas" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="diagnostico">Diagnóstico (Dx)</label>
+                <textarea class="form-control" id="diagnostico" name="diagnostico" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="tratamiento">Tratamiento (medicamentos e indicaciones)</label>
+                <textarea class="form-control" id="tratamiento" name="tratamiento" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="estudios">Solicitud de Estudios</label>
+                <textarea class="form-control" id="estudios" name="estudios" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Generar receta pdf</button>
+        </form>
+    </div>
+
+</html>

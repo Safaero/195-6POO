@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editar Médico</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="btn btn-dark" href="{{ url_for('home') }}">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-dark" href="{{ url_for('consulta') }}"
+              >Consulta Médicos</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container mt-5">
+      <h1 class="text-center">Editar Información del Médico</h1>
+      <form action="{{ url_for('editarMedico', id=medico[0]) }}" method="post">
+        <div class="form-group">
+          <label for="txtNombre">Nombre:</label>
+          <input
+            type="text"
+            name="txtnombre"
+            id="txtNombre"
+            class="form-control"
+            value="{{ medico[1] }}"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="txtCorreo">Correo:</label>
+          <input
+            type="email"
+            name="txtcorreo"
+            id="txtCorreo"
+            class="form-control"
+            value="{{ medico[2] }}"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="txtRol">ROL:</label>
+          <input
+            type="text"
+            name="txtrol"
+            id="txtRol"
+            class="form-control"
+            value="{{ medico[3] }}"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="txtCedula">Cédula Profesional:</label>
+          <input
+            type="text"
+            name="txtcedula"
+            id="txtCedula"
+            class="form-control"
+            value="{{ medico[4] }}"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="txtRfc">RFC:</label>
+          <input
+            type="text"
+            name="txtrfc"
+            id="txtRfc"
+            class="form-control"
+            value="{{ medico[5] }}"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="txtContraseña">Contraseña:</label>
+          <input
+            type="password"
+            name="txtcontraseña"
+            id="txtContraseña"
+            class="form-control"
+            value="{{ medico[6] }}"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          Guardar Cambios
+        </button>
+      </form>
+      <a href="{{ url_for('consulta') }}" class="btn btn-secondary mt-3"
+        >Volver</a
+      >
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

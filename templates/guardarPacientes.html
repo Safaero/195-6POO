@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Paciente</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="btn btn-dark" href="{{ url_for('home') }}">Inicio</a>
+                    <a class="btn btn-dark" href="{{ url_for('expediente') }}">Opciones de pacientes</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center">Registro de Paciente</h1>
+        <form method="POST" class="mt-4">
+            <div class="form-group">
+                <label for="txtMedico">Medico que atiende:</label>
+                <input type="text" name="txtMedico" id="txtMedico" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="txtRfc">Nombre:</label>
+                <input type="text" name="txtNombre" id="txtNombre" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="txtfecha_nac">Fecha de nacimiento:</label>
+                <input type="date" name="txtfecha_nac" id="txtfecha_nac" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="txtenfermedades_cronicas">Enfermedades cronicas:</label>
+                <input type="text" name="txtenfermedades_cronicas" id="txtenfermedades_cronicas" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="txtalergias">Alergias: </label>
+                <input type="text" name="txtalergias" id="txtalergias" class="form-control" required>
+                <div class="form-group">
+                    <label for="txtenfermedades_cronicas">Antecedentes familiares:</label>
+                    <input type="text" name="txtantecedentes_familiares" id="txtantecedentes_familiares" class="form-control" required>
+               
+                
+            <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+        </form>
+    </div>
+
+
+</body>
+</html>
+
+</body>
+</html>

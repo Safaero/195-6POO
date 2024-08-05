@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="btn-group">
+            <a class="btn btn-dark" href="{{ url_for('home') }}">Inicio</a>
+            <a class="btn btn-secondary" href="{{ url_for('registroP') }}">Registrar Expediente</a>
+            <a class="btn btn-dark" href="{{ url_for('exploracion') }}">Cita Exploración y diagnóstico</a>
+            <a class="btn btn-secondary" href="{{ url_for('diagnostico') }}">diagnóstico</a>
+            <a class="btn btn-dark" href="{{ url_for('consultaP') }}">consultar Pacientes</a>
+
+        
+        </div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class="flashes">
+          {% for message in messages %}
+          <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+</head>
+<body>
+    
+</body>
+</html>

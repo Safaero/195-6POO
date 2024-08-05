@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Médico</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="btn btn-dark" href="{{ url_for('home') }}">Inicio</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center">Registro de Médico</h1>
+        <form method="POST" class="mt-4">
+            <div class="form-group">
+                <label for="txtNombre">Nombre:</label>
+                <input type="text" name="txtNombre" id="txtNombre" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="txtRfc">RFC:</label>
+                <input type="text" name="txtRfc" id="txtRfc" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="txtCedula">Cédula Profesional:</label>
+                <input type="text" name="txtCedula" id="txtCedula" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="txtCorreo">Correo:</label>
+                <input type="email" name="txtCorreo" id="txtCorreo" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="txtContraseña">Contraseña:</label>
+                <input type="password" name="txtContraseña" id="txtContraseña" class="form-control" required>
+                <div class="form-group">
+                    <label for="txtRol">Rol:</label>
+                    <select name="txtRol" id="txtRol" class="form-control" required>
+                        <option value="Medico admin">Medico admin</option>
+                        <option value="Medico">Medico</option>
+                    </select>
+                </div>
+                
+            <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+        </form>
+    </div>
+
+
+</body>
+</html>

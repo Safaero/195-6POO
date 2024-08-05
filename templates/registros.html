@@ -3,23 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Registro Medicos</title>
-    <!-- Bootstrap CSS -->
+    <title>Registro Médicos</title>
     <link
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
     />
-  </head>
-  <body>
     <style>
       body {
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
-        background-color: #f4f4f4;
+        background-color: #e6f2ff;
       }
       .navbar {
-        background-color: #333;
+        background-color: #004d99;
         overflow: hidden;
       }
       .navbar a {
@@ -41,14 +38,26 @@
       .welcome-message {
         font-size: 24px;
         margin-top: 50px;
+        color: #004d99;
+      }
+      .form-group label {
+        color: #004d99;
+      }
+      .btn {
+        background-color: #004d99;
+        color: white;
+      }
+      .btn:hover {
+        background-color: #003366;
       }
     </style>
-
+  </head>
+  <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <a class="navbar-brand" href="home">Inicio</a>
       <a class="navbar-brand" href="registros">Registro</a>
-      <a class="navbar-brand" href="consulta">Medicos</a>
-      <a class="navbar-brand" href="expedientes">Pacientes</a>
+      <a class="navbar-brand" href="consulta">Médicos</a>
+      <a class="navbar-brand" href="expedientes">Expediente</a>
     </nav>
 
     <div class="container">
@@ -126,11 +135,10 @@
           />
         </div>
 
-        <button type="submit" class="btn btn-primary">Guardar Médico</button>
+        <button type="submit" class="btn">Guardar Médicos</button>
       </form>
     </div>
 
-    <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

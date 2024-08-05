@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exploración</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="btn btn-dark" href="{{ url_for('home') }}">Inicio</a>
+                    <a class="btn btn-dark" href="{{ url_for('expediente') }}">Opciones de pacientes</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="mt-5">Exploración</h1>
+        <form>
+            <div class="form-group">
+                <label for="paciente">Paciente</label>
+                <input type="text" class="form-control" id="paciente" name="paciente" required>
+            </div>
+            <div class="form-group">
+                <label for="fecha">Fecha</label>
+                <input type="date" class="form-control" id="fecha" name="fecha" required>
+            </div>
+            <div class="form-group">
+                <label for="peso">Peso</label>
+                <input type="number" step="0.01" class="form-control" id="peso" name="peso" required>
+            </div>
+            <div class="form-group">
+                <label for="altura">Altura</label>
+                <input type="number" step="0.01" class="form-control" id="altura" name="altura" required>
+            </div>
+            <div class="form-group">
+                <label for="temperatura">Temperatura</label>
+                <input type="number" step="0.1" class="form-control" id="temperatura" name="temperatura" required>
+            </div>
+            <div class="form-group">
+                <label for="latidos">Latidos por Minuto</label>
+                <input type="number" class="form-control" id="latidos" name="latidos" required>
+            </div>
+            <div class="form-group">
+                <label for="saturacion">Saturación de oxígeno (glucosa)</label>
+                <input type="number" step="0.01" class="form-control" id="saturacion" name="saturacion" required>
+            </div>
+            <div class="form-group">
+                <label for="edad">Edad</label>
+                <input type="number" class="form-control" id="edad" name="edad" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+    </div>
+</body>
+</html>
