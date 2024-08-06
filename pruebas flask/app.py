@@ -11,6 +11,7 @@ app.secret_key = 'mysecretkey'
 mysql = MySQL(app)
 
 
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
