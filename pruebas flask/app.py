@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, url_for, redirect, flash
 from flask_mysqldb import MySQL
+import MySQLdb.cursors
 
 app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'localhost'
@@ -139,23 +140,40 @@ def eliminarPaciente(id):
     return redirect(url_for('expedientes'))
 
 
-@app.route('/editarMedico/<int:id>', methods=['POST'])
+@app.route('/editarMedico/<int:id>', methods=['GET', 'POST'])
 def editarMedico(id):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     if request.method == 'POST':
-        fnombre = request.form['txtnombre']
-        fcorreo = request.form['txtcorreo']
-        frol = request.form['txtrol']
-        fcedula = request.form['txtcedula']
-        frfc = request.form['txtrfc']
-        fcontraseña = request.form['txtcontraseña']
+        nombre = request.form['txtNombre']
+        rfc = request.form['txtRfc']
+        cedulaP = request.form['txtCedula']
+        correoE = request.form['txtCorreo']
+        contraseña = request.form['txtContraseña']
+        rol = request.form['txtRol']
 
-        cursor = mysql.connection.cursor()
-        cursor.execute(
-            'UPDATE tb_medicos SET nombre=%s, correo=%s, id_roles=%s, cedula=%s, rfc=%s, contraseña=%s WHERE id=%s',
-            (fnombre, fcorreo, frol, fcedula, frfc, fcontraseña, id))
+        cursor.execute("""
+            UPDATE tbmedicos
+            SET nombre = %s, rfc = %s, cedulaP = %s, correoE = %s, contraseña = %s, rol = %s
+            WHERE id = %s
+        """, (nombre, rfc, cedulaP, correoE, contraseña, rol, id))
         mysql.connection.commit()
-        flash('Médico actualizado exitosamente.')
+
+        flash('Datos editados y almacenados correctamente')
         return redirect(url_for('consulta'))
+
+    cursor.execute('SELECT * FROM tbmedicos WHERE id = %s', (id,))
+    medico = cursor.fetchone()
+    cursor.close()
+
+    return render_template('editar_medico.html', medico=medico)
+
+
+@app.route('/consultaMedicos')
+def consultaMedicos():
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT * FROM tb_medicos')
+    medicos = cursor.fetchall()
+    return render_template('consulta_medicos.html', medicos=medicos)
 
 
 @app.route('/eliminarMedico/<int:id>', methods=['GET', 'POST'])
