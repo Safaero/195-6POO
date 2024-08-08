@@ -22,7 +22,7 @@ def login():
         medico = cursor.fetchone()
         
         if medico:
-            session['nombre_medico'] = medico[0]  # Almacenar el nombre del médico en la sesión
+            session['nombre_medico'] = medico[0] 
             return redirect(url_for('home'))
         else:
             flash('Credenciales incorrectas. Inténtalo de nuevo.')
@@ -53,6 +53,7 @@ def expedientes():
         cursor = mysql.connection.cursor()
         cursor.execute('SELECT * FROM tb_pacientes')
         pacientes = cursor.fetchall()
+        print(f"Pacientes recuperados: {pacientes}")  # Depuración
         return render_template('expedientes.html', pacientes=pacientes)
     except Exception as e:
         print(f"Error al realizar la consulta en la tabla tb_pacientes: {e}")

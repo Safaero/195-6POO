@@ -1,0 +1,32 @@
+<div class="container mt-5">
+    <h2>Pacientes Registrados</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Medico</th>
+                <th>Nombre</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if pacientes %}
+                {% for paciente in pacientes %}
+                <tr>
+                    <td>{{ paciente[1] }}</td>
+                    <td>{{ paciente[2] }}</td>
+                    <td>{{ paciente[3] }}</td>
+                    <td>
+                        <a href="{{ url_for('editarPaciente', id=paciente[0]) }}" class="btn btn-warning">Editar</a>
+                        <a href="{{ url_for('eliminarPaciente', id=paciente[0]) }}" class="btn btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4">No se encontraron pacientes registrados.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
