@@ -89,7 +89,14 @@ def expedientes():
     pacientes = cursor.fetchall()
     return render_template('expedientes.html', pacientes=pacientes)
 
-    
+@app.route('/eliminarPaciente/<int:id>')
+def eliminarPaciente(id):
+    cursor = mysql.connection.cursor()
+    cursor.execute('DELETE FROM tb_pacientes WHERE id_paciente = %s', (id,))
+    mysql.connection.commit()
+    flash('Paciente eliminado correctamente')
+    return redirect(url_for('expedientes'))
+
      
 @app.errorhandler(404)     
 def paginando(e):
