@@ -44,8 +44,9 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="home">Inicio</a>
         <a class="navbar-brand" href="registros">Registro</a>
-        <a class="navbar-brand" href="consulta">medicos</a>
-        <a class="navbar-brand" href="expedientes">Pacientes</a>
+        <a class="navbar-brand" href="consulta">Medicos</a>
+        <a class="navbar-brand" href="expedientes">Expediente</a>
+        <a class="navbar-brand" href="registro_pacientes">Pacientes</a>
     </nav>
 
     <div class="container">
@@ -59,58 +60,35 @@
         {% endif %}
         {% endwith %}
 
-        <h2 class="welcome-message">Registro de Paciente</h2>
+        <div class="container mt-5">
+            <h2>Pacientes Registrados</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nombre del Médico</th>
+                        <th>Nombre del Paciente</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if pacientes %}
+                        {% for paciente in pacientes %}
+                        <tr>
+                            <td>{{ paciente[1] }}</td>
+                            <td>{{ paciente[2] }}</td>
+                            <td>{{ paciente[3] }}</td>
+                            <td>
 
-        <form action="/guardarPaciente" method="post" class="mt-4">
-            <div class="form-group">
-                <label for="nombre">Nombre medico que atiende</label>
-                <input type="text" class="form-control" id="nombre" name="txtnombre" required>
-            </div>
-
-            <div class="form-group">
-                <label for="correo">Nombre Paciente</label>
-                <input type="text" class="form-control" id="paciente" name="txtpaciente" required>
-            </div>
-
-            <div class="form-group">
-                <label for="fecha">Fecha:</label>
-                <input type="date" class="form-control" id="fecha" name="txtfecha" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Guardar Paciente</button>
-        </form>
-    </div>
-
-    <div class="container mt-5">
-        <h2>Pacientes Registrados</h2>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Medico</th>
-                    <th>Nombre</th>
-                    <th>Fecha</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for paciente in pacientes %}
-                <tr>
-                    <td>{{ paciente[1] }}</td>
-                    <td>{{ paciente[2] }}</td>
-                    <td>{{ paciente[3] }}</td>
-                    <td>
-                        <a href="{{ url_for('editarPaciente', id=paciente[0]) }}" class="btn btn-warning">Editar</a>
-                        <a href="{{ url_for('eliminarPaciente', id=paciente[0]) }}" class="btn btn-danger">Eliminar</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4">No se encontraron pacientes registrados.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        
