@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Inicio</title>
+    <title>Admin inicio</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -39,14 +39,13 @@
 </head>
 <body>
     <div class="navbar">
-        <!-- <a href="home">Inicio</a> -->
-        <a href="expedientes">expedientes</a>
-        <a href="registro_pacientes">pacientes</a>
+        <a href="registros">Registro</a>
+        <a href="consulta">consulta</a>
         <a class="navbar-brand logout-btn" href="/">Cerrar Sesión</a>
     </div>
 
     <div class="container">
-        <div class="welcome-message">Bienvenido Doctor {{ nombre_medico }}</div>
+        <div class="welcome-message">Bienvenido Administrador {{ nombre_medico }}</div>
     </div>
 </body>
 </html>
