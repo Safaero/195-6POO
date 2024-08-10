@@ -81,7 +81,7 @@ def guardarMedico():
     if request.method == 'POST':
         fnombre= request.form ['txtnombre']
         fcorreo= request.form ['txtcorreo']
-        frol= request.form ['txtrol']
+        frol= request.form ['txtid_roles']
         fcedula = request.form ['txtcedula']
         frfc = request.form ['txtrfc']
         fcontraseña = request.form ['txtcontraseña']
@@ -91,6 +91,63 @@ def guardarMedico():
         mysql.connection.commit()
         flash ('medico integrado correctamente')
         return redirect(url_for('consulta'))
+    
+@app.route('/editarMedico/<id>')
+def editarM(id):
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM tb_medicos WHERE id_medico=%s', [id])
+    medico = cur.fetchone()
+    cur.close()
+    if medico:
+        return render_template('editarMedico.html', medico=medico)
+    else:
+        flash('Médico no encontrado', 'danger')
+        return redirect(url_for('index'))
+
+@app.route('/ActualizarMedico/<id>', methods=['POST'])
+def ActualizarMedico(id):
+    if request.method == 'POST':
+        try:
+            fnombre = request.form['txtnombre']
+            fcorreo = request.form['txtcorreo']
+            frol = request.form['txtid_roles']
+            fcedula = request.form['txtcedula']
+            frfc = request.form['txtrfc']
+            fcontraseña = request.form['txtcontraseña']
+
+            cursor = mysql.connection.cursor()
+            cursor.execute('''
+                           UPDATE tb_medicos 
+                           SET nombre=%s, correo=%s, id_roles=%s, cedula=%s, rfc=%s, contraseña=%s 
+                           WHERE id_medico=%s
+                           ''', (fnombre, fcorreo, frol, fcedula, frfc, fcontraseña, id))
+
+            mysql.connection.commit()
+            cursor.close()
+
+            flash('Médico editado correctamente', 'info')
+        
+        except Exception as e:
+            mysql.connection.rollback()
+            flash('Error al actualizar el médico: ' + str(e), 'danger')
+        
+        return redirect(url_for('consulta'))
+
+
+@app.route('/eliminar_medico/<int:id>', methods=['POST'])
+def eliminar_medico(id):
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute('DELETE FROM tb_medicos WHERE id_medico=%s', [id])
+        mysql.connection.commit()
+        cur.close()
+
+        flash('Médico eliminado correctamente', 'success')
+    except Exception as e:
+        flash('Error al eliminar el médico: ' + str(e), 'danger')
+    
+    return redirect(url_for('consulta'))
+
     
 @app.route('/registro_pacientes')
 def registro_pacientes():
