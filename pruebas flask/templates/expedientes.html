@@ -79,6 +79,7 @@
                             <td>{{ paciente[2] }}</td>
                             <td>{{ paciente[3] }}</td>
                             <td>
+                                <a href="{{ url_for('editarPaciente', id=paciente[0]) }}" class="btn btn-warning">Editar</a>
                                 <a href="{{ url_for('eliminarPaciente', id=paciente[0]) }}" class="btn btn-danger">Eliminar</a>
                             </td>
                         </tr>
