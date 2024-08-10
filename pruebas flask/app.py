@@ -76,22 +76,38 @@ def consulta():
         return render_template ('consulta.html',medicos=medicos)	
     
 
-@app.route('/guardarMedico',methods=['POST'])
+@app.route('/guardarMedico', methods=['POST'])
 def guardarMedico():
     if request.method == 'POST':
-        fnombre= request.form ['txtnombre']
-        fcorreo= request.form ['txtcorreo']
-        frol= request.form ['txtid_roles']
-        fcedula = request.form ['txtcedula']
-        frfc = request.form ['txtrfc']
-        fcontraseña = request.form ['txtcontraseña']
-        #print(titulo,artista,anio)
-        cursor = mysql.connection.cursor()
-        cursor.execute('INSERT INTO tb_medicos (nombre,correo,id_roles,cedula,rfc,contraseña) VALUES (%s,%s,%s,%s,%s,%s)',(fnombre,fcorreo,frol,fcedula,frfc,fcontraseña))
-        mysql.connection.commit()
-        flash ('medico integrado correctamente')
-        return redirect(url_for('consulta'))
-    
+        # Obtener los datos del formulario
+        fnombre = request.form['txtnombre']
+        fcorreo = request.form['txtcorreo']
+        frol = request.form['txtid_roles']
+        fcedula = request.form['txtcedula']
+        frfc = request.form['txtrfc']
+        fcontraseña = request.form['txtcontraseña']
+
+        try:
+            cursor = mysql.connection.cursor()
+            
+            cursor.execute('''
+                INSERT INTO tb_medicos (nombre, correo, id_roles, cedula, rfc, contraseña)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            ''', (fnombre, fcorreo, frol, fcedula, frfc, fcontraseña))
+            
+
+            mysql.connection.commit()
+            cursor.close()
+            
+
+            flash('Médico guardado correctamente', 'success')
+            
+        except Exception as e:
+            mysql.connection.rollback()
+            flash('Error al guardar el médico: ' + str(e), 'danger')
+        
+        return redirect(url_for('registros'))
+
 @app.route('/editarMedico/<id>')
 def editarM(id):
     cur = mysql.connection.cursor()
