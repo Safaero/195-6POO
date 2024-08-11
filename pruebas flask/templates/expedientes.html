@@ -67,7 +67,10 @@
                     <tr>
                         <th>Nombre del Médico</th>
                         <th>Nombre del Paciente</th>
-                        <th>Fecha</th>
+                        <th>Fecha de nacimiento</th>
+                        <th>Enfermedades Cronicas</th>
+                        <th>Alergias</th>
+                        <th>Antecedentes Familiares</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -78,10 +81,23 @@
                             <td>{{ paciente[1] }}</td>
                             <td>{{ paciente[2] }}</td>
                             <td>{{ paciente[3] }}</td>
-                            <td>
-                                <a href="{{ url_for('editarPaciente', id=paciente[0]) }}" class="btn btn-warning">Editar</a>
-                                <a href="{{ url_for('eliminarPaciente', id=paciente[0]) }}" class="btn btn-danger">Eliminar</a>
-                            </td>
+                            <td>{{ paciente[4] }}</td>
+                            <td>{{ paciente[5] }}</td>
+                            <td>{{ paciente[6] }}</td>
+                            <td>              <a
+                                href="{{ url_for('editarPaciente', id=paciente[0]) }}"
+                                class="btn btn-warning"
+                                >Editar</a
+                              >
+                              <a
+                                href="{{ url_for('eliminarPaciente', id=paciente[0]) }}"
+                                class="btn btn-danger"
+                                >Eliminar</a
+                              >
+                            </td></td>
+                            
+                            
+                            
                         </tr>
                         {% endfor %}
                     {% else %}

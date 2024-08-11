@@ -48,8 +48,9 @@
     <div class="container mt-5">
         <h2>Registrar Nuevo Paciente</h2>
         <form action="/guardarPaciente" method="post" class="mt-4">
+            <!-- datos obligatorios -->
             <div class="form-group">
-                <label for="nombre_med">Nombre del Médico</label>
+                <label for="nombre_med">Nombre del Médico que atiende</label>
                 <input type="text" class="form-control" id="nombre_med" name="txtnombre_med" required>
             </div>
 
@@ -59,9 +60,22 @@
             </div>
 
             <div class="form-group">
-                <label for="fecha">Fecha</label>
+                <label for="fecha">Fecha de Nacimiento</label>
                 <input type="date" class="form-control" id="fecha" name="txtfecha" required>
             </div>
+
+            <!-- datos opcionales -->
+            <div class="form-group">
+                <label for="txtenfermedades_cronicas">Enfermedades cronicas:</label>
+                <input type="text" name="txtenfermedades_cronicas" id="txtenfermedades_cronicas" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="txtalergias">Alergias: </label>
+                <input type="text" name="txtalergias" id="txtalergias" class="form-control" required>
+                <div class="form-group">
+                    <label for="txtenfermedades_cronicas">Antecedentes familiares:</label>
+                    <input type="text" name="txtantecedentes_familiares" id="txtantecedentes_familiares" class="form-control" required>
+               
 
             <button type="submit" class="btn btn-primary">Guardar Paciente</button>
         </form>

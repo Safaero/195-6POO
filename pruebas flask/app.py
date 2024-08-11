@@ -1,17 +1,6 @@
 from flask import Flask, request, render_template, url_for, redirect, flash, session
 from flask_mysqldb import MySQL
-
-app = Flask(__name__)
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'bdflask'
-app.secret_key = 'mysecretkey'
-
-mysql = MySQL(app)
-
-from flask import Flask, request, render_template, url_for, redirect, flash, session
-from flask_mysqldb import MySQL
+from werkzeug.security import generate_password_hash, check_password_hash  
 
 app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'localhost'
@@ -29,15 +18,13 @@ def login():
         contraseña = request.form['contraseña']
         cursor = mysql.connection.cursor()
         
-
-        cursor.execute('SELECT nombre, id_roles FROM tb_medicos WHERE rfc = %s AND contraseña = %s', (rfc, contraseña))
+        cursor.execute('SELECT nombre, id_roles, contraseña FROM tb_medicos WHERE rfc = %s', [rfc])
         medico = cursor.fetchone()
         
-        if medico:
+        if medico and check_password_hash(medico[2], contraseña):
             session['nombre_medico'] = medico[0]
             session['id_roles'] = medico[1]
             
-           
             if medico[1] == 1:
                 return redirect(url_for('admin_home'))
             else:  
@@ -79,7 +66,6 @@ def consulta():
 @app.route('/guardarMedico', methods=['POST'])
 def guardarMedico():
     if request.method == 'POST':
-        # Obtener los datos del formulario
         fnombre = request.form['txtnombre']
         fcorreo = request.form['txtcorreo']
         frol = request.form['txtid_roles']
@@ -88,25 +74,25 @@ def guardarMedico():
         fcontraseña = request.form['txtcontraseña']
 
         try:
+            # Encriptamos la contraseña antes de guardarla
+            hashed_contraseña = generate_password_hash(fcontraseña)
+
             cursor = mysql.connection.cursor()
-            
             cursor.execute('''
                 INSERT INTO tb_medicos (nombre, correo, id_roles, cedula, rfc, contraseña)
                 VALUES (%s, %s, %s, %s, %s, %s)
-            ''', (fnombre, fcorreo, frol, fcedula, frfc, fcontraseña))
-            
+            ''', (fnombre, fcorreo, frol, fcedula, frfc, hashed_contraseña))
 
             mysql.connection.commit()
             cursor.close()
-            
 
             flash('Médico guardado correctamente', 'success')
-            
         except Exception as e:
             mysql.connection.rollback()
             flash('Error al guardar el médico: ' + str(e), 'danger')
-        
+
         return redirect(url_for('registros'))
+
 
 @app.route('/editarMedico/<id>')
 def editarM(id):
@@ -131,22 +117,24 @@ def ActualizarMedico(id):
             frfc = request.form['txtrfc']
             fcontraseña = request.form['txtcontraseña']
 
+            # Encriptamos la contraseña antes de guardarla
+            hashed_contraseña = generate_password_hash(fcontraseña)
+
             cursor = mysql.connection.cursor()
             cursor.execute('''
                            UPDATE tb_medicos 
                            SET nombre=%s, correo=%s, id_roles=%s, cedula=%s, rfc=%s, contraseña=%s 
                            WHERE id_medico=%s
-                           ''', (fnombre, fcorreo, frol, fcedula, frfc, fcontraseña, id))
+                           ''', (fnombre, fcorreo, frol, fcedula, frfc, hashed_contraseña, id))
 
             mysql.connection.commit()
             cursor.close()
 
             flash('Médico editado correctamente', 'info')
-        
         except Exception as e:
             mysql.connection.rollback()
             flash('Error al actualizar el médico: ' + str(e), 'danger')
-        
+
         return redirect(url_for('consulta'))
 
 
@@ -172,43 +160,83 @@ def registro_pacientes():
 @app.route('/guardarPaciente', methods=['POST'])
 def guardarPaciente():
     if request.method == 'POST':
+        # Datos obligatorios
         nombre_med = request.form['txtnombre_med']
         paciente = request.form['txtpaciente']
-        fecha = request.form['txtfecha']
+        fecha_nac = request.form['txtfecha']
+
+        # Datos opcionales
+        enfermedades_cronicas = request.form.get('txtenfermedades_cronicas', '')
+        alergias = request.form.get('txtalergias', '')
+        antecedentes_familiares = request.form.get('txtantecedentes_familiares', '')
+
+        try:
+            cursor = mysql.connection.cursor()
+            cursor.execute('''
+                INSERT INTO tb_pacientes 
+                (nombre_med, paciente, fecha_nac, enfermedades_cronicas, alergias, antecedentes_familiares)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            ''', (nombre_med, paciente, fecha_nac, enfermedades_cronicas, alergias, antecedentes_familiares))
+
+            mysql.connection.commit()
+            flash('Paciente registrado correctamente', 'success')
+        except Exception as e:
+            mysql.connection.rollback()
+            flash(f'Error al registrar el paciente: {str(e)}', 'danger')
         
-        cursor = mysql.connection.cursor()
-        cursor.execute('INSERT INTO tb_pacientes (nombre_med, paciente, fecha) VALUES (%s, %s, %s)', 
-                       (nombre_med, paciente, fecha))
-        mysql.connection.commit()
-        flash('Paciente registrado correctamente')
         return redirect(url_for('expedientes'))
+    
+    
+
+
 
 @app.route('/editarPaciente/<int:id>', methods=['GET', 'POST'])
 def editarPaciente(id):
-    cursor = mysql.connection.cursor()
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM tb_pacientes WHERE id_Paciente=%s', [id])
+    paciente = cur.fetchone()
+    cur.close()
+    if paciente:
+        return render_template('editar_paciente.html', paciente=paciente)
+    else:
+        flash('Paciente no encontrado', 'danger')
+        return redirect(url_for('index'))
 
+@app.route('/ActualizarPaciente/<int:id>', methods=['POST'])
+def ActualizarPaciente(id):
+    # código para actualizar el paciente:
     if request.method == 'POST':
-        nombre_med = request.form['txtnombre_med']
-        paciente = request.form['txtpaciente']
-        fecha = request.form['txtfecha']
+        try:
+            # Obtener los datos del formulario
+            fnombre_med = request.form['txtnombre_med']
+            fpaciente = request.form['txtpaciente']
+            ffecha_nac = request.form['txtfecha_nac']
+            fenfermedades_cronicas = request.form.get('txtenfermedades_cronicas', '')
+            falergias = request.form.get('txtalergias', '')
+            fantescedentes_familiares = request.form.get('txtantecedentes_familiares', '')
 
-        cursor.execute("""
-            UPDATE tb_pacientes 
-            SET nombre_med = %s, paciente = %s, fecha = %s 
-            WHERE id_paciente = %s
-        """, (nombre_med, paciente, fecha, id))
-        mysql.connection.commit()
-        flash('Paciente actualizado correctamente')
+            cursor = mysql.connection.cursor()
+            cursor.execute('''
+                UPDATE tb_pacientes 
+                SET nombre_med=%s, paciente=%s, fecha_nac=%s, enfermedades_cronicas=%s, alergias=%s, antecedentes_familiares=%s
+                WHERE id_Paciente=%s
+            ''', (fnombre_med, fpaciente, ffecha_nac, fenfermedades_cronicas, falergias, fantescedentes_familiares, id))
+
+            mysql.connection.commit()
+            cursor.close()
+
+            flash('Paciente actualizado correctamente', 'success')
+        except Exception as e:
+            mysql.connection.rollback()
+            flash(f'Error al actualizar el paciente: {str(e)}', 'danger')
+
         return redirect(url_for('expedientes'))
 
-    cursor.execute('SELECT * FROM tb_pacientes WHERE id_paciente = %s', (id,))
-    paciente = cursor.fetchone()
-    return render_template('editar_paciente.html', paciente=paciente)
     
 @app.route('/expedientes')
 def expedientes():
     cursor = mysql.connection.cursor()
-    cursor.execute('SELECT id_paciente, nombre_med, paciente, fecha FROM tb_pacientes')
+    cursor.execute('SELECT id_paciente, nombre_med, paciente, fecha_nac, enfermedades_cronicas, alergias, antecedentes_familiares FROM tb_pacientes')
     pacientes = cursor.fetchall()
     return render_template('expedientes.html', pacientes=pacientes)
 
