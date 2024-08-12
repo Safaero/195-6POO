@@ -36,9 +36,9 @@
             margin-top: 50px;
         }
         table {
-            margin: 0 auto; /* Centra la tabla */
+            margin: 0 auto;
             border-collapse: collapse;
-            width: 80%; /* Ajusta el ancho de la tabla */
+            width: 80%;
             background-color: #fff;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
@@ -87,11 +87,11 @@
 </head>
 <body>
     <div class="navbar">
-        <a href="home">Inicio</a>
+        <a href="admin_home">Inicio</a>
         <a href="registros">Registro</a>
-        <a href="consulta">Consulta</a>
-        <a href="expedientes">expediente</a>
-        <a href="registro_pacientes">pacientes</a>
+        <!-- <a href="consulta">Consulta</a> -->
+        <!-- <a href="expedientes">expediente</a> -->
+        <!-- <a href="registro_pacientes">pacientes</a> -->
     </div>
 
     <div class="container">
@@ -119,23 +119,25 @@
                 <th>ROL</th>
                 <th>Cédula</th>
                 <th>RFC</th>
-
                 <th>Editar</th>
-                <th>Ocultar</th>
+                <th>Eliminar</th>
             </tr>
         </thead>
         <tbody>
             {% for medico in medicos %}
             <tr>
-                <td>{{ medico.0 }}</td>
-                <td>{{ medico.1 }}</td>
-                <td>{{ medico.2 }}</td>
-                <td>{{ medico.3 }}</td>
-                <td>{{ medico.4 }}</td>
-                <td>{{ medico.5 }}</td>
-
-                <td><a href="#">Editar</a></td>
-                <td><a href="#">Ocultar</a></td>
+                <td>{{ medico[0] }}</td>
+                <td>{{ medico[1] }}</td>
+                <td>{{ medico[2] }}</td>
+                <td>{{ medico[3] }}</td>
+                <td>{{ medico[4] }}</td>
+                <td>{{ medico[5] }}</td>
+                <td><a href="{{ url_for('editarM', id=medico[0]) }}">Editar</a></td>
+                <td>
+                    <form action="{{ url_for('eliminar_medico', id=medico[0]) }}" method="POST" style="display: inline;">
+                        <button type="submit" onclick="return confirm('¿Estás seguro de que quieres eliminar este médico?');">Eliminar</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
