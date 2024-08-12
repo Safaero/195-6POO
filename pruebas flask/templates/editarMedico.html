@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro Medicos</title>
-    <!-- Bootstrap CSS -->
+    <title>Editar Médico</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -43,10 +42,9 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="admin_home">Inicio</a>
-        <a href="consulta">consulta</a>
-        <!-- <a class="navbar-brand" href="consulta">medicos</a> -->
-        <!-- <a class="navbar-brand" href="expedientes">expediente</a> -->
-        <!-- <a class="navbar-brand" href="registro_pacientes">pacientes</a> -->
+        <a href="consulta">Consulta</a>
+        <!-- <a class="navbar-brand" href="expedientes">Expediente</a> -->
+        <!-- <a class="navbar-brand" href="registro_pacientes">Pacientes</a> -->
     </nav>
 
     <div class="container">
@@ -60,44 +58,44 @@
         {% endif %}
         {% endwith %}
 
-        <h2 class="welcome-message">Registro de Médicos</h2>
+        <h2 class="welcome-message">Editar Médico</h2>
 
-        <form action="/guardarMedico" method="post" class="mt-4">
-            <div class="form-group">
+        <form action="{{ url_for('ActualizarMedico', id=medico[0]) }}" method="POST">
+            <div>
                 <label for="nombre">Nombre:</label>
-                <input type="text" class="form-control" id="nombre" name="txtnombre" required>
+                <input type="text" id="nombre" name="txtnombre" value="{{ medico[1] }}" required>
             </div>
-
-            <div class="form-group">
+    
+            <div>
                 <label for="correo">Correo:</label>
-                <input type="email" class="form-control" id="correo" name="txtcorreo" required>
+                <input type="email" id="correo" name="txtcorreo" value="{{ medico[2] }}" required>
             </div>
-
+    
             <div>
                 <label for="rol">Rol:</label>
-                <input type="number" id="rol" name="txtid_roles" required>
+                <input type="number" id="id_roles" name="txtid_roles" value="{{ medico[3] }}" required>
             </div>
-
-            <div class="form-group">
-                <label for="rfc">RFC:</label>
-                <input type="text" class="form-control" id="rfc" name="txtrfc" required>
-            </div>
-
-            <div class="form-group">
+            
+    
+            <div>
                 <label for="cedula">Cédula:</label>
-                <input type="number" class="form-control" id="cedula" name="txtcedula" required>
+                <input type="number" id="cedula" name="txtcedula" value="{{ medico[4] }}" required>
             </div>
-
-            <div class="form-group">
+    
+            <div>
+                <label for="rfc">RFC:</label>
+                <input type="text" id="rfc" name="txtrfc" value="{{ medico[5] }}" required>
+            </div>
+    
+            <div>
                 <label for="contraseña">Contraseña:</label>
-                <input type="password" class="form-control" id="contraseña" name="txtcontraseña" required>
+                <input type="password" id="contraseña" name="txtcontraseña" value="{{ medico[6] }}" required>
             </div>
-
-            <button type="submit" class="btn btn-primary">Guardar Médicos</button>
-        </form>
+    
+            <button type="submit">Actualizar</button>
     </div>
+    
 
-    <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
