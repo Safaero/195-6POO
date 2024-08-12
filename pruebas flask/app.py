@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, url_for, redirect, flash, session
 from flask_mysqldb import MySQL
+from functools import wraps
 
 app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'localhost'
@@ -9,6 +10,20 @@ app.config['MYSQL_DB'] = 'bdflask'
 app.secret_key = 'mysecretkey'
 
 mysql = MySQL(app)
+
+# Decorador para verificar si el usuario ha iniciado sesión
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'nombre_medico' not in session:
+            flash('Necesitas iniciar sesión para acceder a esta página.')
+            print("Usuario no autenticado, redirigiendo al login")
+            return redirect(url_for('login'))
+        print(f"Usuario autenticado: {session['nombre_medico']}")
+        return f(*args, **kwargs)
+    return decorated_function
+
+# Rutas y demás código como en el ejemplo anterior...
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -28,52 +43,54 @@ def login():
             return redirect(url_for('login'))
     return render_template('login.html')
 
-
 @app.route('/home')
+@login_required
 def home():
     nombre_medico = session.get('nombre_medico', 'Doctor')
     return render_template('index.html', nombre_medico=nombre_medico)
 
 @app.route('/registros')
+@login_required
 def registros():
     return render_template('registros.html')
 
 @app.route('/consulta')
+@login_required
 def consulta():
-        cursor= mysql.connection.cursor();
-        cursor.execute('select * from tb_medicos')
-        medicos= cursor.fetchall()
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT * FROM tb_medicos')
+    medicos = cursor.fetchall()
+    return render_template('consulta.html', medicos=medicos)
 
-        return render_template ('consulta.html',medicos=medicos)	
-    
-
-@app.route('/guardarMedico',methods=['POST'])
+@app.route('/guardarMedico', methods=['POST'])
+@login_required
 def guardarMedico():
     if request.method == 'POST':
-        fnombre= request.form ['txtnombre']
-        fcorreo= request.form ['txtcorreo']
-        frol= request.form ['txtrol']
-        fcedula = request.form ['txtcedula']
-        frfc = request.form ['txtrfc']
-        fcontraseña = request.form ['txtcontraseña']
-        #print(titulo,artista,anio)
+        fnombre = request.form['txtnombre']
+        fcorreo = request.form['txtcorreo']
+        frol = request.form['txtrol']
+        fcedula = request.form['txtcedula']
+        frfc = request.form['txtrfc']
+        fcontraseña = request.form['txtcontraseña']
         cursor = mysql.connection.cursor()
-        cursor.execute('INSERT INTO tb_medicos (nombre,correo,id_roles,cedula,rfc,contraseña) VALUES (%s,%s,%s,%s,%s,%s)',(fnombre,fcorreo,frol,fcedula,frfc,fcontraseña))
+        cursor.execute('INSERT INTO tb_medicos (nombre, correo, id_roles, cedula, rfc, contraseña) VALUES (%s, %s, %s, %s, %s, %s)', 
+                       (fnombre, fcorreo, frol, fcedula, frfc, fcontraseña))
         mysql.connection.commit()
-        flash ('medico integrado correctamente')
+        flash('Médico integrado correctamente')
         return redirect(url_for('consulta'))
-    
+
 @app.route('/registro_pacientes')
+@login_required
 def registro_pacientes():
     return render_template('registro_pacientes.html')
 
 @app.route('/guardarPaciente', methods=['POST'])
+@login_required
 def guardarPaciente():
     if request.method == 'POST':
         nombre_med = request.form['txtnombre_med']
         paciente = request.form['txtpaciente']
         fecha = request.form['txtfecha']
-        
         cursor = mysql.connection.cursor()
         cursor.execute('INSERT INTO tb_pacientes (nombre_med, paciente, fecha) VALUES (%s, %s, %s)', 
                        (nombre_med, paciente, fecha))
@@ -82,9 +99,10 @@ def guardarPaciente():
         return redirect(url_for('expedientes'))
 
 @app.route('/editarPaciente/<int:id>', methods=['GET', 'POST'])
+@login_required
 def editarPaciente(id):
     cursor = mysql.connection.cursor()
-
+    
     if request.method == 'POST':
         nombre_med = request.form['txtnombre_med']
         paciente = request.form['txtpaciente']
@@ -102,8 +120,9 @@ def editarPaciente(id):
     cursor.execute('SELECT * FROM tb_pacientes WHERE id_paciente = %s', (id,))
     paciente = cursor.fetchone()
     return render_template('editar_paciente.html', paciente=paciente)
-    
+
 @app.route('/expedientes')
+@login_required
 def expedientes():
     cursor = mysql.connection.cursor()
     cursor.execute('SELECT id_paciente, nombre_med, paciente, fecha FROM tb_pacientes')
@@ -111,6 +130,7 @@ def expedientes():
     return render_template('expedientes.html', pacientes=pacientes)
 
 @app.route('/eliminarPaciente/<int:id>')
+@login_required
 def eliminarPaciente(id):
     cursor = mysql.connection.cursor()
     cursor.execute('DELETE FROM tb_pacientes WHERE id_paciente = %s', (id,))
@@ -118,11 +138,9 @@ def eliminarPaciente(id):
     flash('Paciente eliminado correctamente')
     return redirect(url_for('expedientes'))
 
-     
-@app.errorhandler(404)     
+@app.errorhandler(404)
 def paginando(e):
     return 'sintaxis incorrecta'
-     
+
 if __name__ == '__main__':
     app.run(debug=True, port=7000)
-    
