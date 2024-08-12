@@ -4,41 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio de sesión</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
-        /* Estilo personalizado para centrar verticalmente */
-        body, html {
-            height: 100%;
-        }
-
-        .container {
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100%;
+            height: 100vh;
+            background-image: url('/static/maine.jpg');
+            background-size: cover;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            text-align: center;
+        }
+        .container h2 {
+            margin-bottom: 20px;
+            font-size: 35px;
+            color: #333;
+        }
+        .container img {
+            margin-bottom: 20px;
+            width: 90px;
+            height: auto;
+        }
+        .container input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            box-sizing: border-box;
+        }
+        .container button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            background: #764ba2;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .container button:hover {
+            background: #667eea;
+        }
+        .signup-link {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .signup-link a {
+            color: #764ba2;
+            text-decoration: none;
+        }
+        .alert-danger {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h1 class="card-title text-center">Inicio de sesión</h1>
-                    <form method="POST" action="{{ url_for('login') }}">
-                        <div class="mb-3">
-                            <label for="rfc" class="form-label">RFC:</label>
-                            <input type="text" class="form-control" id="rfc" name="rfc" placeholder="Ingresa tu RFC" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="contraseña" class="form-label">Contraseña:</label>
-                            <input type="password" class="form-control" id="contraseña" name="contraseña" placeholder="Ingresa tu contraseña" required>
-                        </div>
-                        <button type="submit" class="btn btn-dark d-block mx-auto">Iniciar sesión</button>
-                    </form>
+        <h2>Inicie su sesión</h2>
+        <img src="/static/enfermere.png" alt="Icono"> <!-- Ruta del ícono PNG -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert-danger">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
                 </div>
-            </div>
-        </div>
+            {% endif %}
+        {% endwith %}
+        <form method="POST" action="{{ url_for('login') }}">
+            <input type="text" id="rfc" name="rfc" placeholder="Ingresa tu RFC" required>
+            <input type="password" id="contraseña" name="contraseña" placeholder="Ingresa tu contraseña" required>
+            <button type="submit">Iniciar sesión</button>
+        </form>
     </div>
 </body>
 </html>
