@@ -248,6 +248,42 @@ def eliminarPaciente(id):
     flash('Paciente eliminado correctamente')
     return redirect(url_for('expedientes'))
 
+@app.route('/buscar_expedientes', methods=['GET', 'POST'])
+def buscar_expedientes():
+    if request.method == 'POST':
+        criterio = request.form['criterio']
+        busqueda = request.form['busqueda']
+        cursor = mysql.connection.cursor()
+
+        if criterio == 'nombre':
+            cursor.execute('SELECT * FROM tb_pacientes WHERE paciente LIKE %s', ('%' + busqueda + '%',))
+        elif criterio == 'fecha':
+            try:
+                fecha = datetime.strptime(busqueda, '%Y-%m-%d')
+                cursor.execute('SELECT * FROM tb_pacientes WHERE fecha_nac = %s', [fecha])
+            except ValueError:
+                flash('Formato de fecha inválido. Usa AAAA-MM-DD.', 'danger')
+                return redirect(url_for('expedientes'))
+
+        pacientes = cursor.fetchall()
+        return render_template('expedientes.html', pacientes=pacientes)
+    
+    return redirect(url_for('expedientes'))
+
+
+@app.route('/reimprimir_receta/<int:id>', methods=['GET'])
+def reimprimir_receta(id):
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT * FROM tb_recetas WHERE id_receta=%s', [id])
+    receta = cursor.fetchone()
+    cursor.close()
+    
+    if receta:
+        return render_template('reimprimir_receta.html', receta=receta)
+    else:
+        flash('Receta no encontrada', 'danger')
+        return redirect(url_for('home'))
+
      
 @app.errorhandler(404)     
 def paginando(e):
