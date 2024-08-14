@@ -1,7 +1,6 @@
 from flask import Flask, request, render_template, url_for, redirect, flash, session
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash  
-from datetime import datetime
 
 app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'localhost'
@@ -57,10 +56,12 @@ def registros():
 
 @app.route('/consulta')
 def consulta():
-    cursor = mysql.connection.cursor()
-    cursor.execute('SELECT * FROM tb_medicos')
-    medicos = cursor.fetchall()
-    return render_template('consulta.html', medicos=medicos)    
+        cursor= mysql.connection.cursor();
+        cursor.execute('select * from tb_medicos')
+        medicos= cursor.fetchall()
+
+        return render_template ('consulta.html',medicos=medicos)	
+    
 
 @app.route('/guardarMedico', methods=['POST'])
 def guardarMedico():
@@ -73,7 +74,9 @@ def guardarMedico():
         fcontraseña = request.form['txtcontraseña']
 
         try:
+            # Encriptamos la contraseña antes de guardarla
             hashed_contraseña = generate_password_hash(fcontraseña)
+
             cursor = mysql.connection.cursor()
             cursor.execute('''
                 INSERT INTO tb_medicos (nombre, correo, id_roles, cedula, rfc, contraseña)
@@ -82,6 +85,7 @@ def guardarMedico():
 
             mysql.connection.commit()
             cursor.close()
+
             flash('Médico guardado correctamente', 'success')
         except Exception as e:
             mysql.connection.rollback()
@@ -89,8 +93,9 @@ def guardarMedico():
 
         return redirect(url_for('registros'))
 
+
 @app.route('/editarMedico/<id>')
-def editarMedico(id):
+def editarM(id):
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM tb_medicos WHERE id_medico=%s', [id])
     medico = cur.fetchone()
@@ -99,7 +104,7 @@ def editarMedico(id):
         return render_template('editarMedico.html', medico=medico)
     else:
         flash('Médico no encontrado', 'danger')
-        return redirect(url_for('consulta'))
+        return redirect(url_for('index'))
 
 @app.route('/ActualizarMedico/<id>', methods=['POST'])
 def ActualizarMedico(id):
@@ -111,6 +116,8 @@ def ActualizarMedico(id):
             fcedula = request.form['txtcedula']
             frfc = request.form['txtrfc']
             fcontraseña = request.form['txtcontraseña']
+
+            # Encriptamos la contraseña antes de guardarla
             hashed_contraseña = generate_password_hash(fcontraseña)
 
             cursor = mysql.connection.cursor()
@@ -122,12 +129,14 @@ def ActualizarMedico(id):
 
             mysql.connection.commit()
             cursor.close()
+
             flash('Médico editado correctamente', 'info')
         except Exception as e:
             mysql.connection.rollback()
             flash('Error al actualizar el médico: ' + str(e), 'danger')
 
         return redirect(url_for('consulta'))
+
 
 @app.route('/eliminar_medico/<int:id>', methods=['POST'])
 def eliminar_medico(id):
@@ -136,12 +145,14 @@ def eliminar_medico(id):
         cur.execute('DELETE FROM tb_medicos WHERE id_medico=%s', [id])
         mysql.connection.commit()
         cur.close()
+
         flash('Médico eliminado correctamente', 'success')
     except Exception as e:
         flash('Error al eliminar el médico: ' + str(e), 'danger')
     
     return redirect(url_for('consulta'))
 
+    
 @app.route('/registro_pacientes')
 def registro_pacientes():
     return render_template('registro_pacientes.html')
@@ -149,9 +160,12 @@ def registro_pacientes():
 @app.route('/guardarPaciente', methods=['POST'])
 def guardarPaciente():
     if request.method == 'POST':
+        # Datos obligatorios
         nombre_med = request.form['txtnombre_med']
         paciente = request.form['txtpaciente']
         fecha_nac = request.form['txtfecha']
+
+        # Datos opcionales
         enfermedades_cronicas = request.form.get('txtenfermedades_cronicas', '')
         alergias = request.form.get('txtalergias', '')
         antecedentes_familiares = request.form.get('txtantecedentes_familiares', '')
@@ -172,6 +186,10 @@ def guardarPaciente():
         
         return redirect(url_for('expedientes'))
     
+    
+
+
+
 @app.route('/editarPaciente/<int:id>', methods=['GET', 'POST'])
 def editarPaciente(id):
     cur = mysql.connection.cursor()
@@ -182,12 +200,14 @@ def editarPaciente(id):
         return render_template('editar_paciente.html', paciente=paciente)
     else:
         flash('Paciente no encontrado', 'danger')
-        return redirect(url_for('expedientes'))
+        return redirect(url_for('index'))
 
 @app.route('/ActualizarPaciente/<int:id>', methods=['POST'])
 def ActualizarPaciente(id):
+    # código para actualizar el paciente:
     if request.method == 'POST':
         try:
+            # Obtener los datos del formulario
             fnombre_med = request.form['txtnombre_med']
             fpaciente = request.form['txtpaciente']
             ffecha_nac = request.form['txtfecha_nac']
@@ -204,6 +224,7 @@ def ActualizarPaciente(id):
 
             mysql.connection.commit()
             cursor.close()
+
             flash('Paciente actualizado correctamente', 'success')
         except Exception as e:
             mysql.connection.rollback()
@@ -211,6 +232,7 @@ def ActualizarPaciente(id):
 
         return redirect(url_for('expedientes'))
 
+    
 @app.route('/expedientes')
 def expedientes():
     cursor = mysql.connection.cursor()
@@ -218,67 +240,18 @@ def expedientes():
     pacientes = cursor.fetchall()
     return render_template('expedientes.html', pacientes=pacientes)
 
-@app.route('/eliminarPaciente/<int:id>', methods=['POST'])
+@app.route('/eliminarPaciente/<int:id>')
 def eliminarPaciente(id):
-    try:
-        cursor = mysql.connection.cursor()
-        cursor.execute('DELETE FROM tb_pacientes WHERE id_paciente = %s', (id,))
-        mysql.connection.commit()
-        flash('Paciente eliminado correctamente')
-    except Exception as e:
-        flash('Error al eliminar el paciente: ' + str(e), 'danger')
-    
+    cursor = mysql.connection.cursor()
+    cursor.execute('DELETE FROM tb_pacientes WHERE id_paciente = %s', (id,))
+    mysql.connection.commit()
+    flash('Paciente eliminado correctamente')
     return redirect(url_for('expedientes'))
 
-@app.route('/buscar_expedientes', methods=['GET', 'POST'])
-def buscar_expedientes():
-    if request.method == 'POST':
-        criterio = request.form['criterio']
-        busqueda = request.form['busqueda']
-        cursor = mysql.connection.cursor()
-
-        if criterio == 'nombre':
-            cursor.execute('SELECT * FROM tb_pacientes WHERE paciente LIKE %s', ('%' + busqueda + '%',))
-        elif criterio == 'fecha':
-            try:
-                fecha = datetime.strptime(busqueda, '%Y-%m-%d')
-                cursor.execute('SELECT * FROM tb_pacientes WHERE fecha_nac = %s', [fecha])
-            except ValueError:
-                flash('Formato de fecha inválido. Usa AAAA-MM-DD.', 'danger')
-                return redirect(url_for('expedientes'))
-
-        pacientes = cursor.fetchall()
-        return render_template('expedientes.html', pacientes=pacientes)
-    
-    return redirect(url_for('expedientes'))
-
-
-@app.route('/reimprimir_receta/<int:id>', methods=['GET'])
-def reimprimir_receta(id):
-    cursor = mysql.connection.cursor()
-    cursor.execute('SELECT * FROM tb_recetas WHERE id_receta=%s', [id])
-    receta = cursor.fetchone()
-    cursor.close()
-    
-    if receta:
-        return render_template('reimprimir_receta.html', receta=receta)
-    else:
-        flash('Receta no encontrada', 'danger')
-        return redirect(url_for('home'))
-
-
-@app.route('/citas_previas', methods=['GET'])
-def citas_previas():
-    cursor = mysql.connection.cursor()
-    cursor.execute('SELECT * FROM tb_citas WHERE id_medico=%s', [session.get('id_roles')])
-    citas = cursor.fetchall()
-    cursor.close()
-    
-    return render_template('citas_previas.html', citas=citas)
-
+     
 @app.errorhandler(404)     
 def paginando(e):
-    return 'Página no encontrada', 404
+    return 'sintaxis incorrecta'
      
 if __name__ == '__main__':
     app.run(debug=True, port=7000)
