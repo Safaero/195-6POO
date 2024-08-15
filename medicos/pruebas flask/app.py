@@ -321,7 +321,7 @@ def buscar_expedientes():
 @app.route('/reimprimir_receta/<int:id>', methods=['GET'])
 def reimprimir_receta(id):
     cursor = mysql.connection.cursor()
-    cursor.execute('SELECT * FROM tb_recetas WHERE id_receta=%s', [id])
+    cursor.execute('SELECT * FROM recetas WHERE id_receta = %s', [id])
     receta = cursor.fetchone()
     cursor.close()
     
@@ -331,15 +331,6 @@ def reimprimir_receta(id):
         flash('Receta no encontrada', 'danger')
         return redirect(url_for('home'))
 
-
-@app.route('/citas_previas', methods=['GET'])
-def citas_previas():
-    cursor = mysql.connection.cursor()
-    cursor.execute('SELECT * FROM tb_citas WHERE id_medico=%s', [session.get('id_roles')])
-    citas = cursor.fetchall()
-    cursor.close()
-    
-    return render_template('citas_previas.html', citas=citas)
 
 @app.route('/registro_diagnostico', methods=['GET', 'POST'])
 def registro_diagnostico():
@@ -369,6 +360,15 @@ def registro_diagnostico():
         return redirect(url_for('registro_diagnostico'))
 
     return render_template('registro_diagnostico.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('Sesión cerrada correctamente', 'success')
+    return redirect(url_for('login'))
+
+
+
 
 
 @app.errorhandler(404)     

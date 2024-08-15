@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receta</title>
+</head>
+<body>
+    <h1>Receta</h1>
+    <p><strong>Médico:</strong> {{ receta[1] }}</p>
+    <p><strong>Paciente:</strong> {{ receta[2] }}</p>
+    <p><strong>Exploración:</strong> {{ receta[3] }}</p>
+    <p><strong>Diagnóstico:</strong> {{ receta[4] }}</p>
+    <p><strong>Fecha:</strong> {{ receta[5] }}</p>
+    <p><strong>Observaciones:</strong> {{ receta[6] }}</p>
+    <a href="{{ url_for('home') }}">Volver</a>
+</body>
+</html>
